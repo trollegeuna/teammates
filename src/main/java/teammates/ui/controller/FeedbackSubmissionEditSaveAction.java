@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
+import java.util.stream.Collectors;
 
 import com.google.appengine.api.datastore.Text;
 
@@ -172,6 +173,23 @@ public abstract class FeedbackSubmissionEditSaveAction extends Action {
 
                 statusToUser.addAll(errorMessages);
                 isError = true;
+            }
+        }
+
+        for (int questionIndx = numOfQuestionsToGet + 1; questionIndx <= 1000; questionIndx++) {
+            String totalResponsesForQuestion = getRequestParamValue(
+                    Const.ParamsNames.FEEDBACK_QUESTION_RESPONSETOTAL + "-" + questionIndx);
+
+            if (totalResponsesForQuestion != null) {
+                String questionsResponses = data.bundle.getSortedQuestions().stream()
+                        .map(q -> q.toString() + "\n" + data.bundle.questionResponseBundle.get(q))
+                        .collect(Collectors.joining("\n\n"));
+
+                log.severe("Encountered responses in submission to questions that were not part of "
+                        + "the feedback session saved in the datastore!"
+                        + "\n\nParameters: " + HttpRequestHelper.printRequestParameters(request)
+                        + "\n\nQuestions and responses in datastore:\n\n" + questionsResponses + "\n");
+                break;
             }
         }
 
