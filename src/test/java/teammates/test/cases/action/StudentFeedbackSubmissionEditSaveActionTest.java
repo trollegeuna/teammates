@@ -1120,7 +1120,7 @@ public class StudentFeedbackSubmissionEditSaveActionTest extends BaseActionTest 
 
     private void testGracePeriodAccessControlForStudents() {
         FeedbackSessionAttributes fs = typicalBundle.feedbackSessions.get("gracePeriodSession");
-        fs.setEndTime(TimeHelper.getDateOffsetToCurrentTime(0));
+        fs.setEndTime(TimeHelper.convertLocalDateToUtc(TimeHelper.getDateOffsetToCurrentTime(0), fs.getTimeZone()));
         typicalBundle.feedbackSessions.put("gracePeriodSession", fs);
 
         assertFalse(fs.isOpened());
