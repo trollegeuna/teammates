@@ -74,24 +74,34 @@ public class FeedbackSessionsLogicChecks {
         }
         return isVisibleResponse;
     }
-
+    /**
+     * Returns boolean value of UserRole role is student
+     */
     private static boolean isStudent(UserRole role) {
         return role == UserRole.STUDENT;
     }
-
+    /**
+     * Returns boolean value of UserRole role is instructor
+     */
     private static boolean isInstructor(UserRole role) {
         return role == UserRole.INSTRUCTOR;
     }
-
+    /**
+     * Returns boolean if this user is creator of session
+     */
     public boolean isCreatorOfSession(String feedbackSessionName, String courseId, String userEmail) {
         FeedbackSessionAttributes fs = fb.getFeedbackSession(feedbackSessionName, courseId);
         return fs.getCreatorEmail().equals(userEmail);
     }
-
+    /**
+     * Returns boolean if feedback session exists
+     */
     public static boolean isFeedbackSessionExists(String feedbackSessionName, String courseId) {
         return fsDb.getFeedbackSession(courseId, feedbackSessionName) != null;
     }
-
+    /**
+     * Returns boolean if there are questions for students
+     */
     public boolean isFeedbackSessionHasQuestionForStudents(
             String feedbackSessionName,
             String courseId) throws EntityDoesNotExistException {
@@ -105,7 +115,9 @@ public class FeedbackSessionsLogicChecks {
 
         return !allQuestions.isEmpty();
     }
-
+    /**
+     * Returns boolean if the feedback is completed by student
+     */
     public boolean isFeedbackSessionCompletedByStudent(FeedbackSessionAttributes fsa, String userEmail) {
         if (fsa.getRespondingStudentList().contains(userEmail)) {
             return true;
@@ -118,7 +130,9 @@ public class FeedbackSessionsLogicChecks {
         // if there is no question for students, session is complete
         return allQuestions.isEmpty();
     }
-
+    /**
+     * Returns boolean if the feedback is completed by the instructor
+     */
     public boolean isFeedbackSessionCompletedByInstructor(FeedbackSessionAttributes fsa, String userEmail)
             throws EntityDoesNotExistException {
         if (fsa.getRespondingInstructorList().contains(userEmail)) {
@@ -133,7 +147,9 @@ public class FeedbackSessionsLogicChecks {
         return allQuestions.isEmpty();
     }
 
-
+    /**
+     * Returns boolean if session os fully completed by student
+     */
     public static boolean isFeedbackSessionFullyCompletedByStudent(
             String feedbackSessionName,
             String courseId, String userEmail)
@@ -156,7 +172,9 @@ public class FeedbackSessionsLogicChecks {
         }
         return true;
     }
-
+    /**
+     * Returns boolean if the feedback is fully completed by instructor
+     */
     private static boolean isFeedbackSessionFullyCompletedByInstructor(
             String feedbackSessionName,
             String courseId, String userEmail)
@@ -203,6 +221,9 @@ public class FeedbackSessionsLogicChecks {
         return isFeedbackSessionViewableToStudents(session);
     }
 
+    /**
+     * Returns true if the feedback session is viewable for students
+     */
     public static boolean isFeedbackSessionViewableToStudents(
             FeedbackSessionAttributes session) {
         // Allow students to view the feedback session if there are questions for them
