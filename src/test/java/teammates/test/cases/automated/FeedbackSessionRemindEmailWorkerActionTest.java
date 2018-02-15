@@ -13,10 +13,7 @@ import teammates.common.util.Const;
 import teammates.common.util.Const.ParamsNames;
 import teammates.common.util.EmailType;
 import teammates.common.util.TaskWrapper;
-import teammates.logic.core.CoursesLogic;
-import teammates.logic.core.FeedbackSessionsLogic;
-import teammates.logic.core.InstructorsLogic;
-import teammates.logic.core.StudentsLogic;
+import teammates.logic.core.*;
 import teammates.ui.automated.FeedbackSessionRemindEmailWorkerAction;
 
 /**
@@ -57,7 +54,7 @@ public class FeedbackSessionRemindEmailWorkerActionTest extends BaseAutomatedAct
 
         List<String> studentRecipientList = new ArrayList<>();
         for (StudentAttributes student : studentsLogic.getStudentsForCourse(session1.getCourseId())) {
-            if (!fsLogic.isFeedbackSessionCompletedByStudent(session1, student.email)) {
+            if (!FeedbackSessionsLogicChecks.isFeedbackSessionCompletedByStudent(session1, student.email)) {
                 studentRecipientList.add(student.email);
             }
         }
