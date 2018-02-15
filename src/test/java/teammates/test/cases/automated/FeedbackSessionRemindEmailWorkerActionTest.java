@@ -23,6 +23,8 @@ public class FeedbackSessionRemindEmailWorkerActionTest extends BaseAutomatedAct
 
     private static final CoursesLogic coursesLogic = CoursesLogic.inst();
     private static final FeedbackSessionsLogic fsLogic = FeedbackSessionsLogic.inst();
+    //Patriks försök
+    private static final FeedbackSessionsLogicChecks fsLogicChecks = FeedbackSessionsLogicChecks.inst();
     private static final InstructorsLogic instructorsLogic = InstructorsLogic.inst();
     private static final StudentsLogic studentsLogic = StudentsLogic.inst();
 
@@ -62,7 +64,7 @@ public class FeedbackSessionRemindEmailWorkerActionTest extends BaseAutomatedAct
         List<String> instructorRecipientList = new ArrayList<>();
         List<String> instructorNotifiedList = new ArrayList<>();
         for (InstructorAttributes instructor : instructorsLogic.getInstructorsForCourse(session1.getCourseId())) {
-            if (!fsLogic.isFeedbackSessionCompletedByInstructor(session1, instructor.email)) {
+            if (!fsLogicChecks.isFeedbackSessionCompletedByInstructor(session1, instructor.email)) {
                 instructorRecipientList.add(instructor.email);
             }
             instructorNotifiedList.add(instructor.email);

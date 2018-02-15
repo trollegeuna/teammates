@@ -24,6 +24,7 @@ public class FeedbackSessionsLogicChecks {
     private static final FeedbackSessionsDb fsDb = new FeedbackSessionsDb();
     private static final FeedbackQuestionsLogic fqLogic = FeedbackQuestionsLogic.inst();
 
+    private static FeedbackSessionsLogicChecks  instance = new FeedbackSessionsLogicChecks();
 
     public static boolean isResponseVisibleForUser(String userEmail,
                                              UserRole role, StudentAttributes student,
@@ -74,6 +75,12 @@ public class FeedbackSessionsLogicChecks {
         }
         return isVisibleResponse;
     }
+
+
+    public static FeedbackSessionsLogicChecks inst() {
+        return instance;
+    }
+
 
     public static boolean isStudent(UserRole role) {
         return role == UserRole.STUDENT;
