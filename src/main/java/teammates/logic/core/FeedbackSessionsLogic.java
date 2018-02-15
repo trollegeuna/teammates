@@ -1670,14 +1670,16 @@ public final class FeedbackSessionsLogic {
         if (isPrivateSessionCreatedByThisUser) {
             responsesForThisQn = frLogic
                     .getFeedbackResponsesForQuestion(question.getId());
-        } else if(isInstructor(role)){
+        } else {
+            if(isInstructor(role)){
             responsesForThisQn = frLogic
                     .getViewableFeedbackResponsesForQuestionInSection(
                             question, userEmail, UserRole.INSTRUCTOR, section);
-        }else{
+            }else{
             responsesForThisQn = frLogic
                     .getViewableFeedbackResponsesForQuestionInSection(
                             question, userEmail, role, section);
+            }
         }
         // return responsesforthisqn param: userEmail, session , question, role, section
         return responsesForThisQn;
