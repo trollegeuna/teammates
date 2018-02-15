@@ -1591,18 +1591,9 @@ public final class FeedbackSessionsLogic {
         Map<String, FeedbackResponseAttributes> relevantResponse = new HashMap<>();
         for (FeedbackQuestionAttributes question : allQuestions) {
 
-            List<FeedbackResponseAttributes> responsesForThisQn;
 
-            boolean isPrivateSessionCreatedByThisUser = session
-                    .isCreator(userEmail) && session.isPrivateSession();
-            if (isPrivateSessionCreatedByThisUser) {
-                responsesForThisQn = frLogic
-                        .getFeedbackResponsesForQuestion(question.getId());
-            } else {
-                responsesForThisQn = frLogic
-                        .getViewableFeedbackResponsesForQuestionInSection(
-                                question, userEmail, role, section);
-            }
+            List<FeedbackResponseAttributes> responsesForThisQn = getFeedbackResponsesForThisQn(
+                    userEmail, session, question, role, section);
 
             boolean hasResponses = !responsesForThisQn.isEmpty();
             if (hasResponses) {
@@ -1665,6 +1656,27 @@ public final class FeedbackSessionsLogic {
                         session, responses, relevantQuestions, emailNameTable,
                         emailLastNameTable, emailTeamNameTable, sectionTeamNameTable,
                         visibilityTable, responseStatus, roster, responseComments);
+    }
+
+    private List<FeedbackResponseAttributes> getFeedbackResponsesForThisQn(
+            String userEmail,
+            FeedbackSessionAttributes session,
+            FeedbackQuestionAttributes question,
+            UserRole role,
+            String section){
+        List<FeedbackResponseAttributes> responsesForThisQn;
+        boolean isPrivateSessionCreatedByThisUser = session
+                .isCreator(userEmail) && session.isPrivateSession();
+        if (isPrivateSessionCreatedByThisUser) {
+            responsesForThisQn = frLogic
+                    .getFeedbackResponsesForQuestion(question.getId());
+        } else {
+            responsesForThisQn = frLogic
+                    .getViewableFeedbackResponsesForQuestionInSection(
+                            question, userEmail, role, section);
+        }
+        // return responsesforthisqn param: userEmail, session , question, role, section
+        return responsesForThisQn;
     }
 
     private FeedbackSessionResultsBundle getFeedbackSessionResultsForUserWithParams(
