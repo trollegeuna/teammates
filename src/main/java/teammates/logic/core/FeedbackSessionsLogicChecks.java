@@ -25,7 +25,7 @@ public class FeedbackSessionsLogicChecks {
     private static final FeedbackQuestionsLogic fqLogic = FeedbackQuestionsLogic.inst();
 
 
-    private static boolean isResponseVisibleForUser(String userEmail,
+    public static boolean isResponseVisibleForUser(String userEmail,
                                              UserRole role, StudentAttributes student,
                                              Set<String> studentsEmailInTeam,
                                              FeedbackResponseAttributes response,
@@ -202,7 +202,7 @@ public class FeedbackSessionsLogicChecks {
     /**
      * Checks whether the feedback session is viewable to the specified user.
      */
-    private static boolean isFeedbackSessionViewableTo(
+    public static boolean isFeedbackSessionViewableTo(
             FeedbackSessionAttributes session,
             String userEmail,
             boolean isInstructorOfCourse) {

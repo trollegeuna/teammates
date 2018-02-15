@@ -12,6 +12,7 @@ import teammates.common.util.Const.ParamsNames;
 import teammates.common.util.EmailWrapper;
 import teammates.common.util.Logger;
 import teammates.logic.api.EmailGenerator;
+import teammates.logic.core.FeedbackSessionsLogicChecks;
 
 /**
  * Task queue worker action: sends feedback session reminder email to a course.
@@ -45,7 +46,7 @@ public class FeedbackSessionRemindEmailWorkerAction extends AutomatedAction {
 
             List<StudentAttributes> studentsToRemindList = new ArrayList<>();
             for (StudentAttributes student : studentList) {
-                if (!logic.isFeedbackSessionCompletedByStudent(session, student.email)) {
+                if (!FeedbackSessionsLogicChecks.isFeedbackSessionCompletedByStudent(session, student.email)) {
                     studentsToRemindList.add(student);
                 }
             }
@@ -53,7 +54,7 @@ public class FeedbackSessionRemindEmailWorkerAction extends AutomatedAction {
             // Filter out instructors who have submitted the feedback session
             List<InstructorAttributes> instructorsToRemindList = new ArrayList<>();
             for (InstructorAttributes instructor : instructorList) {
-                if (!logic.isFeedbackSessionCompletedByInstructor(session, instructor.email)) {
+                if (!FeedbackSessionsLogicChecks.isFeedbackSessionCompletedByInstructor(session, instructor.email)) {
                     instructorsToRemindList.add(instructor);
                 }
             }

@@ -195,7 +195,7 @@ public final class FeedbackQuestionsLogic {
                     "Trying to get questions for a feedback session that does not exist.");
         }
 
-        if (fsLogic.isCreatorOfSession(feedbackSessionName, courseId, userEmail)) {
+        if (FeedbackSessionsLogicChecks.isCreatorOfSession(feedbackSessionName, courseId, userEmail)) {
             return getFeedbackQuestionsForCreatorInstructor(feedbackSessionName, courseId);
         }
 

@@ -39,16 +39,7 @@ import teammates.common.exception.InvalidParametersException;
 import teammates.common.exception.JoinCourseException;
 import teammates.common.util.Assumption;
 import teammates.common.util.GoogleCloudStorageHelper;
-import teammates.logic.core.AccountsLogic;
-import teammates.logic.core.AdminEmailsLogic;
-import teammates.logic.core.CoursesLogic;
-import teammates.logic.core.FeedbackQuestionsLogic;
-import teammates.logic.core.FeedbackResponseCommentsLogic;
-import teammates.logic.core.FeedbackResponsesLogic;
-import teammates.logic.core.FeedbackSessionsLogic;
-import teammates.logic.core.InstructorsLogic;
-import teammates.logic.core.ProfilesLogic;
-import teammates.logic.core.StudentsLogic;
+import teammates.logic.core.*;
 
 /**
  * Provides the business logic for production usage of the system.
@@ -990,13 +981,13 @@ public class Logic {
             throws EntityDoesNotExistException {
         Assumption.assertNotNull(fsa);
         Assumption.assertNotNull(userEmail);
-        return feedbackSessionsLogic.isFeedbackSessionCompletedByInstructor(fsa, userEmail);
+        return FeedbackSessionsLogicChecks.isFeedbackSessionCompletedByInstructor(fsa, userEmail);
     }
 
     public boolean isFeedbackSessionCompletedByStudent(FeedbackSessionAttributes fsa, String userEmail) {
         Assumption.assertNotNull(fsa);
         Assumption.assertNotNull(userEmail);
-        return feedbackSessionsLogic.isFeedbackSessionCompletedByStudent(fsa, userEmail);
+        return FeedbackSessionsLogicChecks.isFeedbackSessionCompletedByStudent(fsa, userEmail);
     }
 
     /**
@@ -1348,7 +1339,7 @@ public class Logic {
         Assumption.assertNotNull(fsa);
         Assumption.assertNotNull(studentEmail);
 
-        return feedbackSessionsLogic.isFeedbackSessionCompletedByStudent(fsa, studentEmail);
+        return FeedbackSessionsLogicChecks.isFeedbackSessionCompletedByStudent(fsa, studentEmail);
     }
 
     /**
