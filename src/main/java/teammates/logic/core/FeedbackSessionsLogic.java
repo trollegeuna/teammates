@@ -1684,7 +1684,7 @@ public final class FeedbackSessionsLogic {
         //Show all questions even if no responses, unless is an ajax request for a specific question.
         Map<String, FeedbackQuestionAttributes> relevantQuestions = getAllQuestions(role, params, allQuestions);
 
-        boolean isPrivateSessionNotCreatedByThisUser = session.isPrivateSession() && !session.isCreator(userEmail);
+        boolean isPrivateSessionNotCreatedByThisUser = session.isPrivateSession() && !session.isCreator(userEmail);   /// asdasdasdasdasd Bryt ut
         if (isPrivateSessionNotCreatedByThisUser) {
             // return empty result set
             return new FeedbackSessionResultsBundle(session, relevantQuestions, roster);
@@ -2380,3 +2380,4 @@ public final class FeedbackSessionsLogic {
     }
 
 }
+
