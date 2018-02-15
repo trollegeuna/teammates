@@ -25,7 +25,7 @@ public class FeedbackSessionsLogicChecks {
     private static final FeedbackQuestionsLogic fqLogic = FeedbackQuestionsLogic.inst();
 
 
-    private static boolean isResponseVisibleForUser(String userEmail,
+    public static boolean isResponseVisibleForUser(String userEmail,
                                              UserRole role, StudentAttributes student,
                                              Set<String> studentsEmailInTeam,
                                              FeedbackResponseAttributes response,
@@ -75,15 +75,15 @@ public class FeedbackSessionsLogicChecks {
         return isVisibleResponse;
     }
 
-    private static boolean isStudent(UserRole role) {
+    public static boolean isStudent(UserRole role) {
         return role == UserRole.STUDENT;
     }
 
-    private static boolean isInstructor(UserRole role) {
+    public static boolean isInstructor(UserRole role) {
         return role == UserRole.INSTRUCTOR;
     }
 
-    public boolean isCreatorOfSession(String feedbackSessionName, String courseId, String userEmail) {
+    public static boolean isCreatorOfSession(String feedbackSessionName, String courseId, String userEmail) {
         FeedbackSessionAttributes fs = fb.getFeedbackSession(feedbackSessionName, courseId);
         return fs.getCreatorEmail().equals(userEmail);
     }
@@ -92,7 +92,7 @@ public class FeedbackSessionsLogicChecks {
         return fsDb.getFeedbackSession(courseId, feedbackSessionName) != null;
     }
 
-    public boolean isFeedbackSessionHasQuestionForStudents(
+    public static boolean isFeedbackSessionHasQuestionForStudents(
             String feedbackSessionName,
             String courseId) throws EntityDoesNotExistException {
         if (!isFeedbackSessionExists(feedbackSessionName, courseId)) {
@@ -106,7 +106,7 @@ public class FeedbackSessionsLogicChecks {
         return !allQuestions.isEmpty();
     }
 
-    public boolean isFeedbackSessionCompletedByStudent(FeedbackSessionAttributes fsa, String userEmail) {
+    public static boolean isFeedbackSessionCompletedByStudent(FeedbackSessionAttributes fsa, String userEmail) {
         if (fsa.getRespondingStudentList().contains(userEmail)) {
             return true;
         }
@@ -119,7 +119,7 @@ public class FeedbackSessionsLogicChecks {
         return allQuestions.isEmpty();
     }
 
-    public boolean isFeedbackSessionCompletedByInstructor(FeedbackSessionAttributes fsa, String userEmail)
+    public static boolean isFeedbackSessionCompletedByInstructor(FeedbackSessionAttributes fsa, String userEmail)
             throws EntityDoesNotExistException {
         if (fsa.getRespondingInstructorList().contains(userEmail)) {
             return true;
@@ -157,7 +157,7 @@ public class FeedbackSessionsLogicChecks {
         return true;
     }
 
-    private static boolean isFeedbackSessionFullyCompletedByInstructor(
+    public static boolean isFeedbackSessionFullyCompletedByInstructor(
             String feedbackSessionName,
             String courseId, String userEmail)
             throws EntityDoesNotExistException {
@@ -184,7 +184,7 @@ public class FeedbackSessionsLogicChecks {
     /**
      * Checks whether the feedback session is viewable to the specified user.
      */
-    private static boolean isFeedbackSessionViewableTo(
+    public static boolean isFeedbackSessionViewableTo(
             FeedbackSessionAttributes session,
             String userEmail,
             boolean isInstructorOfCourse) {
