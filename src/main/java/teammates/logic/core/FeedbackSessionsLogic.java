@@ -1621,7 +1621,7 @@ public final class FeedbackSessionsLogic {
             responsesForThisQn = frLogic
                     .getFeedbackResponsesForQuestion(question.getId());
         } else {
-            if(isInstructor(role)){
+            if(FeedbackSessionsLogicChecks.isInstructor(role)){
             responsesForThisQn = frLogic
                     .getViewableFeedbackResponsesForQuestionInSection(
                             question, userEmail, UserRole.INSTRUCTOR, section);
@@ -1631,10 +1631,7 @@ public final class FeedbackSessionsLogic {
                             question, userEmail, role, section);
             }
         }
-        // return responsesforthisqn param: userEmail, session , question, role, section
         return responsesForThisQn;
-
-
     }
 
     private FeedbackSessionResultsBundle getFeedbackSessionResultsForUserWithParams(
