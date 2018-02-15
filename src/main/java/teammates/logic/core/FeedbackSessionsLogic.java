@@ -1670,13 +1670,19 @@ public final class FeedbackSessionsLogic {
         if (isPrivateSessionCreatedByThisUser) {
             responsesForThisQn = frLogic
                     .getFeedbackResponsesForQuestion(question.getId());
-        } else {
+        } else if(isInstructor(role)){
+            responsesForThisQn = frLogic
+                    .getViewableFeedbackResponsesForQuestionInSection(
+                            question, userEmail, UserRole.INSTRUCTOR, section);
+        }else{
             responsesForThisQn = frLogic
                     .getViewableFeedbackResponsesForQuestionInSection(
                             question, userEmail, role, section);
         }
         // return responsesforthisqn param: userEmail, session , question, role, section
         return responsesForThisQn;
+
+
     }
 
     private FeedbackSessionResultsBundle getFeedbackSessionResultsForUserWithParams(
@@ -1862,15 +1868,8 @@ public final class FeedbackSessionsLogic {
             if (question != null) {
                 relevantQuestions.put(question.getId(), question);
 
-                List<FeedbackResponseAttributes> responsesForThisQn;
-
-                boolean isPrivateSessionCreatedByThisUser = session.isCreator(userEmail) && session.isPrivateSession();
-                if (isPrivateSessionCreatedByThisUser) {
-                    responsesForThisQn = frLogic.getFeedbackResponsesForQuestion(question.getId());
-                } else {
-                    responsesForThisQn = frLogic.getViewableFeedbackResponsesForQuestionInSection(
-                                                    question, userEmail, UserRole.INSTRUCTOR, section);
-                }
+                List<FeedbackResponseAttributes> responsesForThisQn = getFeedbackResponsesForThisQn(
+                        userEmail, session, question, role, section);
 
                 StudentAttributes student = getStudent(courseId, userEmail, role);
                 Set<String> studentsEmailInTeam = getTeammateEmails(courseId, student);
