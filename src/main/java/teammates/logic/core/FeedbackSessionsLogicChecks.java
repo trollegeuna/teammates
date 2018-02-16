@@ -1,30 +1,37 @@
 package teammates.logic.core;
 
-import teammates.common.datatransfer.FeedbackParticipantType;
-import teammates.common.datatransfer.FeedbackSessionType;
-import teammates.common.datatransfer.UserRole;
-import teammates.common.datatransfer.attributes.*;
-import teammates.common.exception.EntityDoesNotExistException;
-import teammates.common.util.Const;
-import teammates.storage.api.FeedbackSessionsDb;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class FeedbackSessionsLogicChecks {
+import teammates.common.datatransfer.FeedbackParticipantType;
+import teammates.common.datatransfer.FeedbackSessionType;
+import teammates.common.datatransfer.UserRole;
+import teammates.common.datatransfer.attributes.FeedbackQuestionAttributes;
+import teammates.common.datatransfer.attributes.FeedbackResponseAttributes;
+import teammates.common.datatransfer.attributes.FeedbackSessionAttributes;
+import teammates.common.datatransfer.attributes.InstructorAttributes;
+import teammates.common.datatransfer.attributes.StudentAttributes;
+import teammates.common.exception.EntityDoesNotExistException;
+import teammates.common.util.Const;
+import teammates.storage.api.FeedbackSessionsDb;
+
+
+/**
+ * Utility functions for FeedbackSessionLogic.
+ */
+public final class FeedbackSessionsLogicChecks {
 
     private static final String ERROR_NON_EXISTENT_FS_STRING_FORMAT = "Trying to %s a non-existent feedback session: ";
-    private static final String ERROR_NON_EXISTENT_FS_GET = String.format(ERROR_NON_EXISTENT_FS_STRING_FORMAT, "get");
-    private static final String ERROR_NON_EXISTENT_FS_UPDATE = String.format(ERROR_NON_EXISTENT_FS_STRING_FORMAT, "update");
     private static final String ERROR_NON_EXISTENT_FS_CHECK = String.format(ERROR_NON_EXISTENT_FS_STRING_FORMAT, "check");
-    private static final String ERROR_NON_EXISTENT_FS_VIEW = String.format(ERROR_NON_EXISTENT_FS_STRING_FORMAT, "view");
-    private static final FeedbackSessionsLogic fb = FeedbackSessionsLogic.inst();
+    private static final FeedbackSessionsLogic fbLogic = FeedbackSessionsLogic.inst();
     private static final FeedbackResponsesLogic frLogic = FeedbackResponsesLogic.inst();
     private static final FeedbackSessionsDb fsDb = new FeedbackSessionsDb();
     private static final FeedbackQuestionsLogic fqLogic = FeedbackQuestionsLogic.inst();
+    private static FeedbackSessionsLogicChecks instance = new FeedbackSessionsLogicChecks();
 
-    private static FeedbackSessionsLogicChecks  instance = new FeedbackSessionsLogicChecks();
+    // Private constructor to avoid instantiation
+    private FeedbackSessionsLogicChecks() { }
 
     public static boolean isResponseVisibleForUser(String userEmail,
                                              UserRole role, StudentAttributes student,
@@ -91,7 +98,7 @@ public class FeedbackSessionsLogicChecks {
     }
 
     public static boolean isCreatorOfSession(String feedbackSessionName, String courseId, String userEmail) {
-        FeedbackSessionAttributes fs = fb.getFeedbackSession(feedbackSessionName, courseId);
+        FeedbackSessionAttributes fs = fbLogic.getFeedbackSession(feedbackSessionName, courseId);
         return fs.getCreatorEmail().equals(userEmail);
     }
 
@@ -247,5 +254,4 @@ public class FeedbackSessionsLogicChecks {
 
         return session.isVisible() && !questionsToAnswer.isEmpty();
     }
-
 }

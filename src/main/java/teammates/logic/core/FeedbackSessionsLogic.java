@@ -69,7 +69,6 @@ public final class FeedbackSessionsLogic {
     private static final String ERROR_NON_EXISTENT_FS_STRING_FORMAT = "Trying to %s a non-existent feedback session: ";
     private static final String ERROR_NON_EXISTENT_FS_GET = String.format(ERROR_NON_EXISTENT_FS_STRING_FORMAT, "get");
     private static final String ERROR_NON_EXISTENT_FS_UPDATE = String.format(ERROR_NON_EXISTENT_FS_STRING_FORMAT, "update");
-    private static final String ERROR_NON_EXISTENT_FS_CHECK = String.format(ERROR_NON_EXISTENT_FS_STRING_FORMAT, "check");
     private static final String ERROR_NON_EXISTENT_FS_VIEW = String.format(ERROR_NON_EXISTENT_FS_STRING_FORMAT, "view");
     private static final String ERROR_FS_ALREADY_PUBLISH = "Error publishing feedback session: "
                                                            + "Session has already been published.";
@@ -1613,22 +1612,19 @@ public final class FeedbackSessionsLogic {
             FeedbackSessionAttributes session,
             FeedbackQuestionAttributes question,
             UserRole role,
-            String section){
+            String section) {
         List<FeedbackResponseAttributes> responsesForThisQn;
         boolean isPrivateSessionCreatedByThisUser = session
                 .isCreator(userEmail) && session.isPrivateSession();
         if (isPrivateSessionCreatedByThisUser) {
-            responsesForThisQn = frLogic
-                    .getFeedbackResponsesForQuestion(question.getId());
+            responsesForThisQn = frLogic.getFeedbackResponsesForQuestion(question.getId());
         } else {
-            if(FeedbackSessionsLogicChecks.isInstructor(role)){
-            responsesForThisQn = frLogic
-                    .getViewableFeedbackResponsesForQuestionInSection(
-                            question, userEmail, UserRole.INSTRUCTOR, section);
-            }else{
-            responsesForThisQn = frLogic
-                    .getViewableFeedbackResponsesForQuestionInSection(
-                            question, userEmail, role, section);
+            if (FeedbackSessionsLogicChecks.isInstructor(role)) {
+                responsesForThisQn = frLogic.getViewableFeedbackResponsesForQuestionInSection(
+                        question, userEmail, UserRole.INSTRUCTOR, section);
+            } else {
+                responsesForThisQn = frLogic.getViewableFeedbackResponsesForQuestionInSection(
+                        question, userEmail, role, section);
             }
         }
         return responsesForThisQn;
@@ -1651,7 +1647,7 @@ public final class FeedbackSessionsLogic {
         //Show all questions even if no responses, unless is an ajax request for a specific question.
         Map<String, FeedbackQuestionAttributes> relevantQuestions = getAllQuestions(role, params, allQuestions);
 
-        boolean isPrivateSessionNotCreatedByThisUser = session.isPrivateSession() && !session.isCreator(userEmail);   /// asdasdasdasdasd Bryt ut
+        boolean isPrivateSessionNotCreatedByThisUser = session.isPrivateSession() && !session.isCreator(userEmail);
         if (isPrivateSessionNotCreatedByThisUser) {
             // return empty result set
             return new FeedbackSessionResultsBundle(session, relevantQuestions, roster);
@@ -1663,8 +1659,8 @@ public final class FeedbackSessionsLogic {
         String questionId = params.get(PARAM_QUESTION_ID);
 
         if (questionId != null) {
-            return getFeedbackSessionResultsForQuestionId(feedbackSessionName, courseId, userEmail, role, roster, session,
-                    allQuestions, relevantQuestions, isIncludeResponseStatus, section, questionId);
+            return getFeedbackSessionResultsForQuestionId(feedbackSessionName, courseId, userEmail, role, roster,
+                    session, allQuestions, relevantQuestions, isIncludeResponseStatus, section, questionId);
         }
 
         Map<String, FeedbackQuestionAttributes> allQuestionsMap = new HashMap<>();
@@ -1828,8 +1824,8 @@ public final class FeedbackSessionsLogic {
                     Map<String, FeedbackResponseAttributes> relevantResponse = new HashMap<>();
                     for (FeedbackResponseAttributes response : responsesForThisQn) {
                         InstructorAttributes instructor = getInstructor(courseId, userEmail, role);
-                        boolean isVisibleResponse = FeedbackSessionsLogicChecks.isResponseVisibleForUser(userEmail, role, null, null, response,
-                                                                             question, instructor);
+                        boolean isVisibleResponse = FeedbackSessionsLogicChecks.isResponseVisibleForUser(userEmail,
+                                role, null, null, response, question, instructor);
                         if (isVisibleResponse) {
                             relevantResponse.put(response.getId(), response);
                             relevantQuestions.put(question.getId(), question);
@@ -1919,10 +1915,9 @@ public final class FeedbackSessionsLogic {
 
                     sectionTeamNameTable.computeIfAbsent(section, key -> new HashSet<>())
                                         .add(student.team);
-
                 }
             }
-       }
+        }
     }
 
     private void sortByCreatedDate(List<FeedbackResponseCommentAttributes> responseCommentList) {
@@ -2174,6 +2169,5 @@ public final class FeedbackSessionsLogic {
             newSession.setSentPublishedEmail(newSession.isPublished());
         }
     }
-
 }
 

@@ -6,11 +6,7 @@ import org.testng.annotations.Test;
 import teammates.common.datatransfer.attributes.FeedbackSessionAttributes;
 import teammates.common.datatransfer.attributes.InstructorAttributes;
 import teammates.common.datatransfer.attributes.StudentAttributes;
-
 import teammates.common.exception.EntityDoesNotExistException;
-
-import teammates.logic.core.FeedbackQuestionsLogic;
-import teammates.logic.core.FeedbackResponsesLogic;
 import teammates.logic.core.FeedbackSessionsLogicChecks;
 
 
@@ -19,8 +15,6 @@ import teammates.logic.core.FeedbackSessionsLogicChecks;
  */
 public class FeedbackSessionsLogicChecksTest extends BaseLogicTest {
     private static FeedbackSessionsLogicChecks fsLogicChecks = FeedbackSessionsLogicChecks.inst();
-    private static FeedbackQuestionsLogic fqLogic = FeedbackQuestionsLogic.inst();
-    private static FeedbackResponsesLogic frLogic = FeedbackResponsesLogic.inst();
 
     @Override
     protected void prepareTestData() {
@@ -71,7 +65,8 @@ public class FeedbackSessionsLogicChecksTest extends BaseLogicTest {
         ______TS("failure: non-existent feedback session for student");
 
         try {
-            fsLogicChecks.isFeedbackSessionFullyCompletedByStudent("nonExistentFSName", fs.getCourseId(), "random.student@email");
+            fsLogicChecks.isFeedbackSessionFullyCompletedByStudent("nonExistentFSName",
+                    fs.getCourseId(), "random.student@email");
             signalFailureToDetectException();
         } catch (EntityDoesNotExistException edne) {
             assertEquals("Trying to check a non-existent feedback session: "
@@ -80,12 +75,12 @@ public class FeedbackSessionsLogicChecksTest extends BaseLogicTest {
         }
 
         ______TS("success case: fully done by student 1");
-        assertTrue(fsLogicChecks.isFeedbackSessionFullyCompletedByStudent(fs.getFeedbackSessionName(), fs.getCourseId(),
-                student1OfCourse1.email));
+        assertTrue(fsLogicChecks.isFeedbackSessionFullyCompletedByStudent(fs.getFeedbackSessionName(),
+                fs.getCourseId(), student1OfCourse1.email));
 
         ______TS("success case: partially done by student 3");
-        assertFalse(fsLogicChecks.isFeedbackSessionFullyCompletedByStudent(fs.getFeedbackSessionName(), fs.getCourseId(),
-                student3OfCourse1.email));
+        assertFalse(fsLogicChecks.isFeedbackSessionFullyCompletedByStudent(fs.getFeedbackSessionName(),
+                fs.getCourseId(), student3OfCourse1.email));
     }
 
 

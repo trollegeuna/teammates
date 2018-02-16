@@ -22,7 +22,11 @@ import teammates.common.util.StringHelper;
 import teammates.common.util.Templates;
 import teammates.common.util.Templates.EmailTemplates;
 import teammates.common.util.TimeHelper;
-import teammates.logic.core.*;
+import teammates.logic.core.CoursesLogic;
+import teammates.logic.core.FeedbackSessionsLogic;
+import teammates.logic.core.FeedbackSessionsLogicChecks;
+import teammates.logic.core.InstructorsLogic;
+import teammates.logic.core.StudentsLogic;
 
 /**
  * Handles operations related to generating emails to be sent from provided templates.
@@ -286,8 +290,8 @@ public class EmailGenerator {
 
             for (StudentAttributes student : studentsForCourse) {
                 try {
-                    if (!FeedbackSessionsLogicChecks.isFeedbackSessionFullyCompletedByStudent(session.getFeedbackSessionName(),
-                            session.getCourseId(), student.email)) {
+                    if (!FeedbackSessionsLogicChecks.isFeedbackSessionFullyCompletedByStudent(
+                            session.getFeedbackSessionName(), session.getCourseId(), student.email)) {
                         students.add(student);
                     }
                 } catch (EntityDoesNotExistException e) {
