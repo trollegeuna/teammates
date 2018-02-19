@@ -270,32 +270,6 @@ public final class FeedbackSessionsLogic {
      * {@code FeedbackResponses} that an instructor can view/submit as a
      * {@link FeedbackSessionQuestionsBundle}.
      */
-    public FeedbackSessionQuestionsBundle getFeedbackSessionQuestionsForInstructor(String feedbackSessionName,
-            String courseId, String userEmail) throws EntityDoesNotExistException {
-
-        FeedbackSessionAttributes fsa = fsDb.getFeedbackSession(courseId, feedbackSessionName);
-
-        if (fsa == null) {
-            throw new EntityDoesNotExistException(ERROR_NON_EXISTENT_FS_GET + courseId + "/" + feedbackSessionName);
-        }
-
-        InstructorAttributes instructor = instructorsLogic.getInstructorForEmail(courseId, userEmail);
-        Map<FeedbackQuestionAttributes, List<FeedbackResponseAttributes>> bundle = new HashMap<>();
-        Map<String, Map<String, String>> recipientList = new HashMap<>();
-
-        List<FeedbackQuestionAttributes> questions = fqLogic.getFeedbackQuestionsForInstructor(feedbackSessionName,
-                courseId, userEmail);
-
-        InstructorAttributes instructorGiver = instructor;
-
-        for (FeedbackQuestionAttributes question : questions) {
-
-            updateBundleAndRecipientListWithResponsesForInstructor(courseId, userEmail, fsa, instructor, bundle,
-                    recipientList, question, instructorGiver, null);
-        }
-
-        return new FeedbackSessionQuestionsBundle(fsa, bundle, recipientList);
-    }
 
     public FeedbackSessionQuestionsBundle getFeedbackSessionQuestionsForInstructor(String feedbackSessionName,
             String courseId, String feedbackQuestionId, String userEmail) throws EntityDoesNotExistException {
@@ -305,18 +279,22 @@ public final class FeedbackSessionsLogic {
         if (fsa == null) {
             throw new EntityDoesNotExistException(ERROR_NON_EXISTENT_FS_GET + courseId + "/" + feedbackSessionName);
         }
-
         InstructorAttributes instructor = instructorsLogic.getInstructorForEmail(courseId, userEmail);
         Map<FeedbackQuestionAttributes, List<FeedbackResponseAttributes>> bundle = new HashMap<>();
         Map<String, Map<String, String>> recipientList = new HashMap<>();
-
-        FeedbackQuestionAttributes question = fqLogic.getFeedbackQuestion(feedbackQuestionId);
-
         InstructorAttributes instructorGiver = instructor;
-
-        updateBundleAndRecipientListWithResponsesForInstructor(courseId, userEmail, fsa, instructor, bundle,
-                recipientList, question, instructorGiver, null);
-
+        if (feedbackQuestionId == null) {
+            List<FeedbackQuestionAttributes> questions = fqLogic.getFeedbackQuestionsForInstructor(feedbackSessionName,
+                    courseId, userEmail);
+            for (FeedbackQuestionAttributes question : questions) {
+                updateBundleAndRecipientListWithResponsesForInstructor(courseId, userEmail, fsa, instructor, bundle,
+                        recipientList, question, instructorGiver, null);
+            }
+        } else {
+            FeedbackQuestionAttributes question = fqLogic.getFeedbackQuestion(feedbackQuestionId);
+            updateBundleAndRecipientListWithResponsesForInstructor(courseId, userEmail, fsa, instructor, bundle,
+                    recipientList, question, instructorGiver, null);
+        }
         return new FeedbackSessionQuestionsBundle(fsa, bundle, recipientList);
     }
 
