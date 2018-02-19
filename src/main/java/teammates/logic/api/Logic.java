@@ -46,6 +46,7 @@ import teammates.logic.core.FeedbackQuestionsLogic;
 import teammates.logic.core.FeedbackResponseCommentsLogic;
 import teammates.logic.core.FeedbackResponsesLogic;
 import teammates.logic.core.FeedbackSessionsLogic;
+import teammates.logic.core.FeedbackSessionsLogicChecks;
 import teammates.logic.core.InstructorsLogic;
 import teammates.logic.core.ProfilesLogic;
 import teammates.logic.core.StudentsLogic;
@@ -990,13 +991,13 @@ public class Logic {
             throws EntityDoesNotExistException {
         Assumption.assertNotNull(fsa);
         Assumption.assertNotNull(userEmail);
-        return feedbackSessionsLogic.isFeedbackSessionCompletedByInstructor(fsa, userEmail);
+        return FeedbackSessionsLogicChecks.isFeedbackSessionCompletedByInstructor(fsa, userEmail);
     }
 
     public boolean isFeedbackSessionCompletedByStudent(FeedbackSessionAttributes fsa, String userEmail) {
         Assumption.assertNotNull(fsa);
         Assumption.assertNotNull(userEmail);
-        return feedbackSessionsLogic.isFeedbackSessionCompletedByStudent(fsa, userEmail);
+        return FeedbackSessionsLogicChecks.isFeedbackSessionCompletedByStudent(fsa, userEmail);
     }
 
     /**
@@ -1348,7 +1349,7 @@ public class Logic {
         Assumption.assertNotNull(fsa);
         Assumption.assertNotNull(studentEmail);
 
-        return feedbackSessionsLogic.isFeedbackSessionCompletedByStudent(fsa, studentEmail);
+        return FeedbackSessionsLogicChecks.isFeedbackSessionCompletedByStudent(fsa, studentEmail);
     }
 
     /**

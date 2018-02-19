@@ -24,6 +24,7 @@ import teammates.common.util.Templates.EmailTemplates;
 import teammates.common.util.TimeHelper;
 import teammates.logic.core.CoursesLogic;
 import teammates.logic.core.FeedbackSessionsLogic;
+import teammates.logic.core.FeedbackSessionsLogicChecks;
 import teammates.logic.core.InstructorsLogic;
 import teammates.logic.core.StudentsLogic;
 
@@ -63,7 +64,7 @@ public class EmailGenerator {
         String template = EmailTemplates.USER_FEEDBACK_SESSION;
 
         CourseAttributes course = coursesLogic.getCourse(session.getCourseId());
-        boolean isEmailNeeded = fsLogic.isFeedbackSessionForStudentsToAnswer(session);
+        boolean isEmailNeeded = FeedbackSessionsLogicChecks.isFeedbackSessionForStudentsToAnswer(session);
         List<InstructorAttributes> instructors = isEmailNeeded
                                                  ? instructorsLogic.getInstructorsForCourse(session.getCourseId())
                                                  : new ArrayList<InstructorAttributes>();
@@ -282,15 +283,15 @@ public class EmailGenerator {
     public List<EmailWrapper> generateFeedbackSessionClosingEmails(FeedbackSessionAttributes session) {
 
         List<StudentAttributes> students = new ArrayList<>();
-        boolean isEmailNeeded = fsLogic.isFeedbackSessionForStudentsToAnswer(session);
+        boolean isEmailNeeded = FeedbackSessionsLogicChecks.isFeedbackSessionForStudentsToAnswer(session);
 
         if (isEmailNeeded) {
             List<StudentAttributes> studentsForCourse = studentsLogic.getStudentsForCourse(session.getCourseId());
 
             for (StudentAttributes student : studentsForCourse) {
                 try {
-                    if (!fsLogic.isFeedbackSessionFullyCompletedByStudent(session.getFeedbackSessionName(),
-                            session.getCourseId(), student.email)) {
+                    if (!FeedbackSessionsLogicChecks.isFeedbackSessionFullyCompletedByStudent(
+                            session.getFeedbackSessionName(), session.getCourseId(), student.email)) {
                         students.add(student);
                     }
                 } catch (EntityDoesNotExistException e) {
@@ -325,7 +326,7 @@ public class EmailGenerator {
         CourseAttributes course = coursesLogic.getCourse(session.getCourseId());
         boolean isEmailNeededForStudents = false;
         try {
-            isEmailNeededForStudents = fsLogic.isFeedbackSessionHasQuestionForStudents(
+            isEmailNeededForStudents = FeedbackSessionsLogicChecks.isFeedbackSessionHasQuestionForStudents(
                     session.getFeedbackSessionName(), session.getCourseId());
         } catch (EntityDoesNotExistException e) {
             log.severe("Course " + session.getCourseId() + " does not exist or "
@@ -350,7 +351,7 @@ public class EmailGenerator {
         String template = EmailTemplates.USER_FEEDBACK_SESSION_PUBLISHED;
 
         CourseAttributes course = coursesLogic.getCourse(session.getCourseId());
-        boolean isEmailNeeded = fsLogic.isFeedbackSessionViewableToStudents(session);
+        boolean isEmailNeeded = FeedbackSessionsLogicChecks.isFeedbackSessionViewableToStudents(session);
         List<InstructorAttributes> instructors = isEmailNeeded
                                                  ? instructorsLogic.getInstructorsForCourse(session.getCourseId())
                                                  : new ArrayList<InstructorAttributes>();
@@ -371,7 +372,7 @@ public class EmailGenerator {
         String template = EmailTemplates.USER_FEEDBACK_SESSION_UNPUBLISHED;
 
         CourseAttributes course = coursesLogic.getCourse(session.getCourseId());
-        boolean isEmailNeeded = fsLogic.isFeedbackSessionViewableToStudents(session);
+        boolean isEmailNeeded = FeedbackSessionsLogicChecks.isFeedbackSessionViewableToStudents(session);
         List<InstructorAttributes> instructors = isEmailNeeded
                                                  ? instructorsLogic.getInstructorsForCourse(session.getCourseId())
                                                  : new ArrayList<InstructorAttributes>();

@@ -15,6 +15,7 @@ import teammates.common.util.EmailType;
 import teammates.common.util.TaskWrapper;
 import teammates.logic.core.CoursesLogic;
 import teammates.logic.core.FeedbackSessionsLogic;
+import teammates.logic.core.FeedbackSessionsLogicChecks;
 import teammates.logic.core.InstructorsLogic;
 import teammates.logic.core.StudentsLogic;
 import teammates.ui.automated.FeedbackSessionRemindEmailWorkerAction;
@@ -26,6 +27,7 @@ public class FeedbackSessionRemindEmailWorkerActionTest extends BaseAutomatedAct
 
     private static final CoursesLogic coursesLogic = CoursesLogic.inst();
     private static final FeedbackSessionsLogic fsLogic = FeedbackSessionsLogic.inst();
+    private static final FeedbackSessionsLogicChecks fscLogic = FeedbackSessionsLogicChecks.inst();
     private static final InstructorsLogic instructorsLogic = InstructorsLogic.inst();
     private static final StudentsLogic studentsLogic = StudentsLogic.inst();
 
@@ -57,7 +59,7 @@ public class FeedbackSessionRemindEmailWorkerActionTest extends BaseAutomatedAct
 
         List<String> studentRecipientList = new ArrayList<>();
         for (StudentAttributes student : studentsLogic.getStudentsForCourse(session1.getCourseId())) {
-            if (!fsLogic.isFeedbackSessionCompletedByStudent(session1, student.email)) {
+            if (!FeedbackSessionsLogicChecks.isFeedbackSessionCompletedByStudent(session1, student.email)) {
                 studentRecipientList.add(student.email);
             }
         }
@@ -65,7 +67,7 @@ public class FeedbackSessionRemindEmailWorkerActionTest extends BaseAutomatedAct
         List<String> instructorRecipientList = new ArrayList<>();
         List<String> instructorNotifiedList = new ArrayList<>();
         for (InstructorAttributes instructor : instructorsLogic.getInstructorsForCourse(session1.getCourseId())) {
-            if (!fsLogic.isFeedbackSessionCompletedByInstructor(session1, instructor.email)) {
+            if (!fscLogic.isFeedbackSessionCompletedByInstructor(session1, instructor.email)) {
                 instructorRecipientList.add(instructor.email);
             }
             instructorNotifiedList.add(instructor.email);
