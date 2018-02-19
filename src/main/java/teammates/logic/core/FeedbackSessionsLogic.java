@@ -1941,18 +1941,17 @@ public final class FeedbackSessionsLogic {
 
     private void addEmailNamePairsToTable(Map<String, String> emailNameTable, FeedbackResponseAttributes response,
             FeedbackQuestionAttributes question, CourseRoster roster, int pairType) {
-        if (question.giverType == FeedbackParticipantType.TEAMS && roster.isStudentInCourse(response.giver)) {
-            emailNameTable.putIfAbsent(response.giver + Const.TEAM_OF_EMAIL_OWNER,
-                    getNameTeamNamePairForEmail(question.giverType, response.giver, roster)[pairType]);
 
+        String nameTeamNamePairGiver = getNameTeamNamePairForEmail(question.giverType, response.giver,
+                roster)[pairType];
+        if (question.giverType == FeedbackParticipantType.TEAMS && roster.isStudentInCourse(response.giver)) {
+            emailNameTable.putIfAbsent(response.giver + Const.TEAM_OF_EMAIL_OWNER, nameTeamNamePairGiver);
             StudentAttributes studentGiver = roster.getStudentForEmail(response.giver);
             if (studentGiver != null) {
-                emailNameTable.putIfAbsent(studentGiver.team,
-                        getNameTeamNamePairForEmail(question.giverType, response.giver, roster)[pairType]);
+                emailNameTable.putIfAbsent(studentGiver.team, nameTeamNamePairGiver);
             }
         } else {
-            emailNameTable.putIfAbsent(response.giver,
-                    getNameTeamNamePairForEmail(question.giverType, response.giver, roster)[pairType]);
+            emailNameTable.putIfAbsent(response.giver, nameTeamNamePairGiver);
         }
 
         FeedbackParticipantType recipientType = null;
@@ -1961,9 +1960,9 @@ public final class FeedbackSessionsLogic {
         } else {
             recipientType = question.recipientType;
         }
-
-        emailNameTable.putIfAbsent(response.recipient,
-                getNameTeamNamePairForEmail(recipientType, response.recipient, roster)[pairType]);
+        String nameTeamNamePairRecipient = getNameTeamNamePairForEmail(recipientType, response.recipient,
+                roster)[pairType];
+        emailNameTable.putIfAbsent(response.recipient, nameTeamNamePairRecipient);
     }
 
     private List<FeedbackSessionDetailsBundle> getFeedbackSessionDetailsForCourse(String courseId,
@@ -2038,35 +2037,31 @@ public final class FeedbackSessionsLogic {
     // return a pair of String that contains Giver/Recipient'sName (at index 0)
     // and TeamName (at index 1)
     private String[] getNameTeamNamePairForEmail(FeedbackParticipantType type, String email, CourseRoster roster) {
-        String giverRecipientName = null;
-        String giverRecipientLastName = null;
-        String teamName = null;
         String name = null;
         String lastName = null;
         String team = null;
+        String giverRecipientName = null;
+        String giverRecipientLastName = null;
+        String teamName = null;
 
         StudentAttributes student = roster.getStudentForEmail(email);
-        boolean isStudent = student != null;
-        if (isStudent) {
+
+        if (student != null) {
             name = student.name;
             team = student.team;
             lastName = student.lastName;
         } else {
             InstructorAttributes instructor = roster.getInstructorForEmail(email);
-            boolean isInstructor = instructor != null;
-            if (isInstructor) {
+            if (instructor != null) {
                 name = instructor.name;
                 lastName = instructor.name;
                 team = Const.USER_TEAM_FOR_INSTRUCTOR;
             } else {
                 if (email.equals(Const.GENERAL_QUESTION)) {
-                    // Email represents that there is no specific recipient.
                     name = Const.USER_IS_NOBODY;
                     lastName = Const.USER_IS_NOBODY;
                     team = email;
                 } else {
-                    // The email represents a missing *Attribute.
-                    // It might be a team name or the *Attribute has been deleted.
                     name = Const.USER_IS_MISSING;
                     lastName = Const.USER_IS_MISSING;
                     team = email;
